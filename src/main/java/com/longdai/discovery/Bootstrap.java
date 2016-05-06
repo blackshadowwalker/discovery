@@ -13,32 +13,31 @@ import java.util.Set;
  * Created by karl on 2016/5/5.
  */
 public class Bootstrap {
-    private Log log = LogFactory.getLog(Bootstrap.class);
+    private static Log log = LogFactory.getLog(Bootstrap.class);
 
     public static void main(String [] args) throws Exception {
         ServerInfo serverInfo = new ServerInfo();
-        serverInfo.setType("longdai");
-        serverInfo.setSubType("api");
+        serverInfo.setType("test");
+        serverInfo.setSubType("search");
         serverInfo.setName("AgentMain");
 
         final Bootstrap bootstrap = new Bootstrap();
         bootstrap.init(serverInfo);
-        bootstrap.start();
-
-        bootstrap.subscribe(new ServerListener() {
-            @Override
-            public void notify(ServerInfo serverInfo, String agentID, String responseId) {
-                System.out.println("Find ServerInfo: " + serverInfo.getServerUrl() + " at " + serverInfo.getHostname());
-            }
-        });
-
+        bootstrap.start();//如果需要搜索也需要启动
 
         List<ServerInfo> list = bootstrap.search("longdai");
-        System.out.println("Search:");
+        log.info("Search:-------------------------");
         for (ServerInfo info : list) {
-            System.out.println("ServerInfo: " + info.getSubType() +  " "+ info.getServerUrl() + " at " + info.getHostname());
+            log.info("ServerInfo: " + info.getSubType() +  " "+ info.getServerUrl() + " at " + info.getHostname());
         }
 
+
+//        bootstrap.subscribe(new ServerListener() {
+//            @Override
+//            public void notify(ServerInfo serverInfo, String agentID, String responseId) {
+//                System.out.println("Find ServerInfo: " + serverInfo.getServerUrl() + " at " + serverInfo.getHostname());
+//            }
+//        });
 
         Thread hoodThread = new Thread(){
             @Override
@@ -77,7 +76,7 @@ public class Bootstrap {
             hostName = local.getHostName();
         }
 
-        int port = 8080;
+        int port = 28080;
         Set<String> keys = System.getProperties().stringPropertyNames();
         for (String key: keys){
             if(key.endsWith("port")){

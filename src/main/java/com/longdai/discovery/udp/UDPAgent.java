@@ -177,7 +177,7 @@ public class UDPAgent implements Agent {
         listenThread.start();
     }
 
-    ServerRequest parseRequestData(byte[] data, int dataLen) {
+    public static ServerRequest parseRequestData(byte[] data, int dataLen) {
         try {
             ChannelBuffer buf = ChannelBuffers.copiedBuffer(data);
             int totalLen = buf.readInt();
@@ -208,7 +208,7 @@ public class UDPAgent implements Agent {
         return null;
     }
 
-    byte[] buildResponseBuffer(ServerResponse serverPackage) {
+    public static byte[] buildResponseBuffer(ServerResponse serverPackage) {
         if (serverPackage == null)
             return null;
         byte[] cmd = serverPackage.getCommand().name().getBytes();
@@ -237,7 +237,7 @@ public class UDPAgent implements Agent {
     }
 
     @Override
-    synchronized public List<ServerInfo> search(String serverType) {
+    synchronized public List<ServerInfo> search(final String serverType) {
         try {
             final String requestId = UUID.randomUUID().toString();
 
@@ -249,8 +249,10 @@ public class UDPAgent implements Agent {
             ServerListener serverListener = new ServerListener() {
                 @Override
                 public void notify(ServerInfo serverInfo, String agentID, String responseId) {
-                    if (requestId.equals(responseId)){
-                        serverInfoList.add(serverInfo);
+                    if (requestId.equals(responseId)) {
+                        if (serverType!=null && serverType.endsWith(serverInfo.getType())){
+                            serverInfoList.add(serverInfo);
+                        }
                     }
                 }
             };

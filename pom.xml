@@ -44,7 +44,35 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.longdai.discovery.Bootstrap</mainClass>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>gozap构件发布版仓库</name>
+            <url>http://repo.gozap.com/repos/content/repositories/gozap/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>gozap构件快照版仓库</name>
+            <url>http://repo.gozap.com/repos/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>

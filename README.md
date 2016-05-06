@@ -66,8 +66,6 @@ public class ServerService {
 
 ### 客户端服务发现
 
-客户端监听组播，然后发送搜索命令(SEARCH)并等待5秒钟基本就可以发现所有服务
-
 
 ### UDP数据包定义
 
@@ -151,4 +149,29 @@ class ServerRequest {
 }
 ```
 
+####　示例客户端代码
+
+客户端打开监听组播(239.125.100.211:50211)，然后发送搜索命令(SEARCH)UDP数据包并等待5秒钟基本就可以发现所有服务, 然后将 hostname 和 serverUrl　记录
+
+* hostname 获取的开发服务主机的hostname,用来辨别电脑  
+* serverUrl 提供服务的地址, 如: http://10.10.1.220:8080  
+
+如java:
+
+```java
+ServerInfo serverInfo = new ServerInfo();
+serverInfo.setType("test");
+serverInfo.setSubType("search");
+serverInfo.setName("AgentMain");
+
+final Bootstrap bootstrap = new Bootstrap();
+bootstrap.init(serverInfo);
+bootstrap.start();//如果需要搜索也需要启动
+
+List<ServerInfo> list = bootstrap.search("longdai");
+log.info("Search:-------------------------");
+for (ServerInfo info : list) {
+    log.info("ServerInfo: " + info.getSubType() +  " "+ info.getServerUrl() + " at " + info.getHostname());
+}
+```
 
